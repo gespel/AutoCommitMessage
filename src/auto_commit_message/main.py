@@ -8,10 +8,9 @@ from ollama import chat, ChatResponse
 class AutoCommitMessage:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
 
         handler = logging.StreamHandler()
-        handler.setLevel(logging.DEBUG)
+        handler.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s: %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
@@ -29,7 +28,7 @@ class AutoCommitMessage:
                     'content': 'Create a concise and short git commit message based on the following diff:\n\n' + diff_content + '\n\nPlease provide only the commit message without any additional text.',
                 },
             ])
-            self.logger.info(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
+            self.logger.debug(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
             return response['message']['content']
 
 
@@ -39,12 +38,12 @@ class AutoCommitMessage:
     def cleanup(self):
         if os.path.exists("changes.diff"):
             os.remove("changes.diff")
-            self.logger.info("Cleaned up changes.diff file.")
+            self.logger.debug("Cleaned up changes.diff file.")
 
     def commit_commit_message(self, commit_message):
         if commit_message:
             subprocess.run(["git", "commit", "-m", commit_message])
-            self.logger.info("Committed changes with message: %s", commit_message)
+            self.logger.debug(f"Committed changes with message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL}")
         else:
             self.logger.error("No commit message generated. Commit aborted.")
 
