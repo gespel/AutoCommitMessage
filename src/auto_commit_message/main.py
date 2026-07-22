@@ -8,6 +8,7 @@ from ollama import chat, ChatResponse
 class AutoCommitMessage:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
         handler = logging.StreamHandler()
         handler.setLevel(logging.INFO)
