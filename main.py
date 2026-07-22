@@ -33,7 +33,7 @@ class AutoCommitMessage:
 
 
     def create_git_diff_file(self):
-        subprocess.run(["git", "diff"], stdout=open("changes.diff", "w"))
+        subprocess.run(["git", "diff", "--staged"], stdout=open("changes.diff", "w"))
 
     def cleanup(self):
         if os.path.exists("changes.diff"):
