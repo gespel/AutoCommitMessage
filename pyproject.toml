@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-auto-commit-message = "auto_commit_message.main:main"
+acm = "auto_commit_message.main:main"
 
 [build-system]
 requires = ["hatchling"]
