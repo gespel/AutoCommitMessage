@@ -2,6 +2,7 @@ import logging
 import argparse
 import os
 import subprocess
+import colorama
 from ollama import chat, ChatResponse
 
 class AutoCommitMessage:
@@ -28,7 +29,7 @@ class AutoCommitMessage:
                     'content': 'Create a concise and short git commit message based on the following diff:\n\n' + diff_content + '\n\nPlease provide only the commit message without any additional text.',
                 },
             ])
-            self.logger.info("Generated commit message: %s", response['message']['content'])
+            self.logger.info(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
             return response['message']['content']
 
 
