@@ -54,9 +54,11 @@ if __name__ == "__main__":
 
     args = argument_parser.parse_args()
 
-    auto_commit_message = AutoCommitMessage()
+    acm = AutoCommitMessage()
     
-    auto_commit_message.create_git_diff_file()
-    commit_message = auto_commit_message.generate_commit_message()
-    auto_commit_message.commit_commit_message(commit_message)
-    auto_commit_message.cleanup()
+    acm.create_git_diff_file()
+
+    commit_message = acm.generate_commit_message()
+    
+    acm.commit_commit_message(commit_message)
+    acm.cleanup()
