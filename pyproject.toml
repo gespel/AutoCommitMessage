@@ -1,7 +1,7 @@
 [project]
-name = "autocommitmessage"
+name = "AutoCommitMessage"
 version = "0.1.0"
-description = "Add your description here"
+description = "This is a Python project that automatically generates concise git commit messages based on the changes in your code using a local Ollama model."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
