@@ -23,7 +23,7 @@ class AutoCommitMessage:
 
         with open("changes.diff", "r") as diff_file:
             diff_content = diff_file.read()
-            response: ChatResponse = chat(model='gemma4:e4b', messages=[
+            response: ChatResponse = chat(model='gemma4:e2b', messages=[
                 {
                     'role': 'user',
                     'content': 'Create a concise and short git commit message based on the following diff:\n\n' + diff_content + '\n\nPlease provide only the commit message without any additional text.',
