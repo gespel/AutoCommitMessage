@@ -41,7 +41,7 @@ class AutoCommitMessage:
             response: ChatResponse = chat(model='ministral-3:3b', messages=[
                 {
                     'role': 'system',
-                    'content': 'You generate concise and short git commit messages based on the provided diff content. Only provide the commit message without any additional text or explanations. ONLY THE COMMIT MESSAGE AS OUTPUT! The commit message should be concise, and relevant to the changes made in the diff. Do not overthink.',
+                    'content': 'You generate concise and short git commit messages based on the provided diff content. Only provide the commit message without any additional text or explanations. ONLY THE COMMIT MESSAGE AS OUTPUT! The commit message should be concise, and relevant to the changes made in the diff.',
                 },
                 {
                     'role': 'user',
