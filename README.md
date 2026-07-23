@@ -8,6 +8,12 @@ In order to use AutoCommitMessage, you need to have [Ollama](https://ollama.com/
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+After installing Ollama, download the ministral-3:3b model using the following command:
+
+```bash
+ollama pull ministral-3:3b
+```
+
 Also, make sure you have uv installed. You can then install AutoCommitMessage using uv:
 
 ```bash
