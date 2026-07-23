@@ -23,10 +23,14 @@ class AutoCommitMessage:
 
         with open("changes.diff", "r") as diff_file:
             diff_content = diff_file.read()
-            response: ChatResponse = chat(model='gemma4:e4b', messages=[
+            response: ChatResponse = chat(model='qwen3.5:0.8b', messages=[
+                {
+                    'role': 'system',
+                    'content': 'You are a helpful assistant that generates concise and short git commit messages based on the provided diff content. Only provide the commit message without any additional text or explanations. The commit message should be clear, concise, and relevant to the changes made in the diff.',
+                },
                 {
                     'role': 'user',
-                    'content': 'Create a concise and short git commit message based on the following diff:\n\n' + diff_content + '\n\nPlease provide only the commit message without any additional text!',
+                    'content': diff_content,
                 },
             ])
             self.logger.debug(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
