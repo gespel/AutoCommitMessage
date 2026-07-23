@@ -4,6 +4,7 @@ import argparse
 import os
 import subprocess
 import colorama
+import json
 from ollama import chat, ChatResponse
 
 class AutoCommitMessage:
@@ -15,6 +16,20 @@ class AutoCommitMessage:
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s: %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
+
+    def read_config(self):
+        config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+        if not os.path.exists(config_path):
+            self.logger.error(f"Configuration file not found at {config_path}. Please create a config.json file.")
+            return None
+
+        with open(config_path, 'r') as config_file:
+            try:
+                config = json.load(config_file)
+                return config
+            except json.JSONDecodeError as e:
+                self.logger.error(f"Error reading configuration file: {e}")
+                return None
 
     def generate_commit_message(self):
         if not os.path.exists("changes.diff"):
