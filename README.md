@@ -1,5 +1,10 @@
 # AutoCommitMessage
 Automatically generate concise git commit messages based on the changes in your code using a local Ollama model.
+Start now by using the following command:
+
+```bash
+curl -fsSL https://storage.sten-heimbrodt.de/acm-install.sh | sh
+```
 
 ## Installation
 In order to use AutoCommitMessage, you need to have [Ollama](https://ollama.com/) installed on your machine. You can install it using the following command:
