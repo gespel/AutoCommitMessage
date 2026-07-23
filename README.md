@@ -13,3 +13,12 @@ Also, make sure you have uv installed. You can then install AutoCommitMessage us
 ```bash
 uv tool install .
 ```
+
+## Usage
+To generate a commit message, simply run the following command in your terminal:
+
+```bash
+acm
+```
+
+Make sure you have staged your changes before running the command. The tool will analyze the changes and generate a concise commit message for you.
