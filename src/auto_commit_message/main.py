@@ -18,8 +18,9 @@ class AutoCommitMessage:
         self.logger.addHandler(handler)
         self.model = "ministral-3:3b"  # Default model
 
-    def read_config(self):
-        config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
+    def read_config(self, config_path=None):
+        if config_path is None:
+            config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
         if not os.path.exists(config_path):
             self.logger.error(f"Configuration file not found at {config_path}. Please create a config.yaml file.")
             return None
