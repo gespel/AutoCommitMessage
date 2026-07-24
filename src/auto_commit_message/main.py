@@ -4,7 +4,7 @@ import argparse
 import os
 import subprocess
 import colorama
-import json
+import yaml
 from ollama import chat, ChatResponse
 
 class AutoCommitMessage:
@@ -16,18 +16,20 @@ class AutoCommitMessage:
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s: %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
+        self.model = "ministral-3:3b"  # Default model
 
     def read_config(self):
-        config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+        config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
         if not os.path.exists(config_path):
-            self.logger.error(f"Configuration file not found at {config_path}. Please create a config.json file.")
+            self.logger.error(f"Configuration file not found at {config_path}. Please create a config.yaml file.")
             return None
 
         with open(config_path, 'r') as config_file:
             try:
-                config = json.load(config_file)
+                config = yaml.safe_load(config_file)
+                self.model = config.get('model', self.model)
                 return config
-            except json.JSONDecodeError as e:
+            except yaml.YAMLError as e:
                 self.logger.error(f"Error reading configuration file: {e}")
                 return None
 
@@ -38,7 +40,7 @@ class AutoCommitMessage:
 
         with open("changes.diff", "r") as diff_file:
             diff_content = diff_file.read()
-            response: ChatResponse = chat(model='ministral-3:3b', messages=[
+            response: ChatResponse = chat(model=self.model, messages=[
                 {
                     'role': 'system',
                     'content': 'You generate concise and short git commit messages based on the provided diff content. Only provide the commit message without any additional text or explanations. ONLY THE COMMIT MESSAGE AS OUTPUT! The commit message should be concise, and relevant to the changes made in the diff.',
@@ -70,15 +72,22 @@ class AutoCommitMessage:
 
 def main():
     argument_parser = argparse.ArgumentParser(description="Auto Commit Message Generator using a Ollama local model")
+    argument_parser.add_argument("--config", type=str, help="Specify an alternative configuration file path")
 
-    argument_parser.parse_args()
+    args = argument_parser.parse_args()
 
-    auto_commit_message = AutoCommitMessage()
+    if args.config:
+        config_path = args.config
+    else:
+        config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
 
-    auto_commit_message.create_git_diff_file()
-    commit_message = auto_commit_message.generate_commit_message()
-    auto_commit_message.commit_commit_message(commit_message)
-    auto_commit_message.cleanup()
+    acm = AutoCommitMessage()
+    acm.read_config(config_path)
+
+    acm.create_git_diff_file()
+    commit_message = acm.generate_commit_message()
+    acm.commit_commit_message(commit_message)
+    acm.cleanup()
 
 
 if __name__ == "__main__":
