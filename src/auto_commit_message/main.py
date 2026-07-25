@@ -16,7 +16,8 @@ class AutoCommitMessage:
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s: %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        self.model = "ministral-3:3b"  # Default model
+        self.model = None
+        self.system_prompt = None
 
     def read_config(self, config_path=None):
         if config_path is None:
@@ -29,6 +30,7 @@ class AutoCommitMessage:
             try:
                 config = yaml.safe_load(config_file)
                 self.model = config.get('model', self.model)
+                self.system_prompt = config.get('system_prompt', self.system_prompt)
                 return config
             except yaml.YAMLError as e:
                 self.logger.error(f"Error reading configuration file: {e}")
@@ -39,12 +41,16 @@ class AutoCommitMessage:
             self.logger.error("No changes.diff file found. Do you have the files staged for commit?")
             return None
 
+        if self.model is None or self.system_prompt is None:
+            self.logger.error("Model or system prompt not set. Please check your configuration.")
+            return None
+
         with open("changes.diff", "r") as diff_file:
             diff_content = diff_file.read()
             response: ChatResponse = chat(model=self.model, messages=[
                 {
                     'role': 'system',
-                    'content': 'You generate concise and short git commit messages based on the provided diff content. Only provide the commit message without any additional text or explanations. ONLY THE COMMIT MESSAGE AS OUTPUT! The commit message should be concise, and relevant to the changes made in the diff.',
+                    'content': self.system_prompt,
                 },
                 {
                     'role': 'user',
@@ -83,12 +89,14 @@ def main():
         config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
 
     acm = AutoCommitMessage()
-    acm.read_config(config_path)
+    try:
+        acm.read_config(config_path)
 
-    acm.create_git_diff_file()
-    commit_message = acm.generate_commit_message()
-    acm.commit_commit_message(commit_message)
-    acm.cleanup()
+        acm.create_git_diff_file()
+        commit_message = acm.generate_commit_message()
+        acm.commit_commit_message(commit_message)
+    finally:
+        acm.cleanup()
 
 
 if __name__ == "__main__":
