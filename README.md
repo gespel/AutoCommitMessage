@@ -18,9 +18,7 @@ AutoCommitMessage inspects your staged git diff and generates a concise, relevan
 
 - 🧠 **Local-first** — runs entirely against your own Ollama instance, nothing is sent to a third party
 - ⚡ **One command** — stage your changes, run `acm`, done
-- 🎯 **Diff-aware** — reads your staged `git diff` and generates a message grounded in the actual change
 - 🛠️ **Configurable** — swap the model or tune the system prompt via a simple YAML file
-- 🧹 **Self-cleaning** — temporary diff files are removed automatically after each run
 
 ## 🚀 Quick Start
 
