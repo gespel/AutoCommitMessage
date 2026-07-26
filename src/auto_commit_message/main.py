@@ -8,7 +8,7 @@ import yaml
 from ollama import chat, ChatResponse
 
 class AutoCommitMessage:
-    def __init__(self):
+    def __init__(self, model=None, system_prompt=None):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
@@ -16,8 +16,8 @@ class AutoCommitMessage:
         formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s: %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        self.model = None
-        self.system_prompt = None
+        self.model = model
+        self.system_prompt = system_prompt
 
     def read_config(self, config_path=None):
         if config_path is None:
@@ -85,6 +85,7 @@ class AutoCommitMessage:
 def main():
     argument_parser = argparse.ArgumentParser(description="Auto Commit Message Generator using a Ollama local model")
     argument_parser.add_argument("--config", type=str, help="Specify an alternative configuration file path")
+    argument_parser.add_argument("--model", type=str, help="Specify the model to use for generating commit messages")
 
     args = argument_parser.parse_args()
 
@@ -93,7 +94,7 @@ def main():
     else:
         config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
 
-    acm = AutoCommitMessage()
+    acm = AutoCommitMessage(model=args.model)
     try:
         acm.read_config(config_path)
 
