@@ -101,6 +101,8 @@ def main():
         diff_text = acm.get_git_diff()
         commit_message = acm.generate_commit_message(diff_text=diff_text)
         acm.commit_commit_message(commit_message)
+    except Exception as e:
+        acm.logger.error(f"An error occurred: {e}")
     finally:
         acm.cleanup()
 
