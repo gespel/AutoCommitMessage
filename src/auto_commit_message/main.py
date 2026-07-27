@@ -5,6 +5,7 @@ import os
 import subprocess
 import colorama
 import yaml
+import ollama
 from ollama import chat, ChatResponse
 
 class AutoCommitMessage:
@@ -48,18 +49,23 @@ class AutoCommitMessage:
             self.logger.error("Model or system prompt not set. Please check your configuration.")
             return None
 
-        response: ChatResponse = chat(model=self.model, messages=[
-            {
-                'role': 'system',
-                'content': self.system_prompt,
-                },
+        try:
+            response: ChatResponse = chat(model=self.model, messages=[
                 {
-                    'role': 'user',
-                    'content': diff_text,
-                },
-            ])
-        self.logger.debug(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
-        return response['message']['content']
+                    'role': 'system',
+                    'content': self.system_prompt,
+                    },
+                    {
+                        'role': 'user',
+                        'content': diff_text,
+                    },
+                ])
+            self.logger.debug(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
+            return response['message']['content']
+        except ollama._types.ResponseError as e:
+            self.logger.error(f"Error generating commit message: {e}")
+            return None
+
 
 
     def create_git_diff_file(self):
