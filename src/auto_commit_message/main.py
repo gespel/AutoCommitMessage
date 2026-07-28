@@ -93,6 +93,7 @@ def main():
     argument_parser = argparse.ArgumentParser(description="Auto Commit Message Generator using a Ollama local model")
     argument_parser.add_argument("--config", type=str, help="Specify an alternative configuration file path")
     argument_parser.add_argument("--model", type=str, help="Specify the model to use for generating commit messages")
+    argument_parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = argument_parser.parse_args()
 
@@ -102,6 +103,10 @@ def main():
         config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
 
     acm = AutoCommitMessage(model=args.model)
+    if args.debug:
+        acm.logger.setLevel(logging.DEBUG)
+        acm.logger.debug("Debug logging enabled.")
+
     try:
         acm.read_config(config_path)
 
