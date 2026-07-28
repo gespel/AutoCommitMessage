@@ -108,7 +108,7 @@ def main():
         acm.logger.debug("Debug logging enabled.")
 
     try:
-        acm.read_config(config_path)
+        acm.read_config(config_path=config_path)
 
         diff_text = acm.get_git_diff()
         commit_message = acm.generate_commit_message(diff_text=diff_text)
