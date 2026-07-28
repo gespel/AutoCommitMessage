@@ -82,7 +82,7 @@ class AutoCommitMessage:
 
     def commit_commit_message(self, commit_message):
         if commit_message:
-            print(f"🤖 Generated commit message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL} ✅")
+            print(f"🤖 Generated commit message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL}")
             subprocess.run(["git", "commit", "-m", commit_message], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
             self.logger.debug(f"Committed changes with message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL}")
         else:
