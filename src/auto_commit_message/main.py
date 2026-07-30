@@ -94,6 +94,7 @@ def main():
     argument_parser.add_argument("--config", type=str, help="Specify an alternative configuration file path")
     argument_parser.add_argument("--model", type=str, help="Specify the model to use for generating commit messages")
     argument_parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    argument_parser.add_argument("--show-config", action="store_true", help="Show the current configuration and exit")
 
     args = argument_parser.parse_args()
 
@@ -109,6 +110,10 @@ def main():
 
     try:
         acm.read_config(config_path=config_path)
+
+        if args.show_config:
+            print(f"Current configuration:\nModel: {acm.model}\nSystem Prompt: {acm.system_prompt}")
+            return
 
         diff_text = acm.get_git_diff()
         commit_message = acm.generate_commit_message(diff_text=diff_text)
