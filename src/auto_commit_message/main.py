@@ -84,7 +84,7 @@ class AutoCommitMessage:
         if commit_message:
             print(f"🤖 Generated commit message: {colored(commit_message, 'green')}")
             subprocess.run(["git", "commit", "-m", commit_message], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-            self.logger.debug(f"Committed changes with message: {colored(commit_message, 'green')}")
+            self.logger.debug(f"Committed changes!")
         else:
             self.logger.error("No commit message generated. Commit aborted.")
 
