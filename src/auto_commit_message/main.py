@@ -109,15 +109,22 @@ def main():
         acm.logger.debug("Debug logging enabled.")
 
     try:
+        acm.logger.debug(f"Using configuration file: {config_path}")
         acm.read_config(config_path=config_path)
+        acm.logger.debug(f"Configuration loaded: Model='{acm.model}', System Prompt='{acm.system_prompt[:50]}...'")
 
         if args.show_config:
             print(f"Current configuration:\n\nModel: {colored(acm.model, 'green')}\n\nSystem Prompt: {colored(acm.system_prompt, 'green')}")
             return
 
+        acm.logger.debug("Getting git diff...")
         diff_text = acm.get_git_diff()
+        acm.logger.debug(f"Git diff obtained: {colored(diff_text[:100], 'yellow')}...")
+
         commit_message = acm.generate_commit_message(diff_text=diff_text)
+
         acm.commit_commit_message(commit_message)
+
     except Exception as e:
         acm.logger.error(f"An error occurred: {e}")
     finally:
