@@ -3,7 +3,7 @@ import logging
 import argparse
 import os
 import subprocess
-import colorama
+from termcolor import colored
 import yaml
 import ollama
 from ollama import chat, ChatResponse
@@ -60,7 +60,7 @@ class AutoCommitMessage:
                         'content': diff_text,
                     },
                 ])
-            self.logger.debug(f"Generated commit message: {colorama.Fore.GREEN}{response['message']['content']}{colorama.Style.RESET_ALL}")
+            self.logger.debug(f"Generated commit message: {colored(response['message']['content'], 'green')}")
             return response['message']['content']
         except ollama._types.ResponseError as e:
             self.logger.error(f"Error generating commit message: {e}")
@@ -82,9 +82,9 @@ class AutoCommitMessage:
 
     def commit_commit_message(self, commit_message):
         if commit_message:
-            print(f"🤖 Generated commit message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL}")
+            print(f"🤖 Generated commit message: {colored(commit_message, 'green')}")
             subprocess.run(["git", "commit", "-m", commit_message], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-            self.logger.debug(f"Committed changes with message: {colorama.Fore.GREEN}{commit_message}{colorama.Style.RESET_ALL}")
+            self.logger.debug(f"Committed changes with message: {colored(commit_message, 'green')}")
         else:
             self.logger.error("No commit message generated. Commit aborted.")
 
@@ -112,7 +112,7 @@ def main():
         acm.read_config(config_path=config_path)
 
         if args.show_config:
-            print(f"Current configuration:\nModel: {acm.model}\nSystem Prompt: {acm.system_prompt}")
+            print(f"Current configuration:\n\nModel: {colored(acm.model, 'green')}\n\nSystem Prompt: {colored(acm.system_prompt, 'green')}")
             return
 
         diff_text = acm.get_git_diff()
